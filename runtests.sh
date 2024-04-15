@@ -22,7 +22,11 @@ for dir in $DIRS; do
     PID1=$!
     ./$dir/test_kex$alg &
     PID2=$!
-    ./$dir/test_vectors$alg > tvecs$alg &
+    if [ $1="--no-tvecs" ]; then
+        ./$dir/test_vectors$alg &
+    else
+        ./$dir/test_vectors$alg > tvecs$alg &
+    fi
     PID3=$!
     wait $PID1 $PID2 $PID3
   done
