@@ -1,19 +1,6 @@
-import subprocess
+import subprocess 
 import time
 import pandas as pd
- 
-PARAMETER_SETS=["512", "768", "1024", "512-90s", "768-90s", "1024-90s"]
- 
-print("Starting speedcheck script /p/jmz9sadprojects/nsp-kyber/runspeedcheckstofile.sh")
-
-# If your shell script has shebang, 
-# you can omit shell=True argument.
-starttime = time.time()
-speedcheckoutput = subprocess.run(["/p/jmz9sadprojects/nsp-kyber/runspeedcheckstofile.sh"], 
-    shell=True)
-endtime = time.time()
-
-print("finished speedcheck script in: ", endtime-starttime, " seconds")
 
 with open('runspeedchecks.out', 'r') as results:
    #lines = f.read().split('\n')
@@ -49,10 +36,9 @@ for i in range(len(outputs)):
     #        encaps_results[1].split(" ")[1]+","+encaps_results[2].split(" ")[1]+","+
     #        decaps_results[1].split(" ")[1]+","+decaps_results[2].split(" ")[1]) 
 
-df = pd.DataFrame(data, columns=["avx2", "speedtest", "keypair_median", "keypair_average", "encaps_median", "encaps_average", "decaps_median", "decaps_average"])
+df = pd.DataFrame(data, columns=["avx2", "speedtest", "keypair_median", "keypair_average", "encaps_median", "encaps_average", "decaps_meian", "decaps_average"])
 print(df.shape)
 print(df.head())
 print(df.columns)
 
 df.to_csv("speed.csv", index=False)
-
