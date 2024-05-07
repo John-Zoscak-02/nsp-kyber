@@ -1,0 +1,26 @@
+make: Entering directory '/p/jmz9sadprojects/nsp-kyber/rsa'
+make: Nothing to be done for 'speed'.
+make: Leaving directory '/p/jmz9sadprojects/nsp-kyber/rsa'
+1024 2048 4096
+1024
+Command: ./rsa/test_speed1024
+/p/jmz9sadprojects/nsp-kyber/runspeedchecksrsa.sh: line 23: 2527947 Segmentation fault      (core dumped) ./$dir/test_speed$alg
+2048
+Command: ./rsa/test_speed2048
+/p/jmz9sadprojects/nsp-kyber/runspeedchecksrsa.sh: line 23: 2527950 Segmentation fault      (core dumped) ./$dir/test_speed$alg
+4096
+Command: ./rsa/test_speed4096
+/p/jmz9sadprojects/nsp-kyber/runspeedchecksrsa.sh: line 23: 2527952 Segmentation fault      (core dumped) ./$dir/test_speed$alg
+shasum: tvecs512: No such file or directory
+tvecs512: FAILED open or read
+shasum: tvecs512-90s: No such file or directory
+tvecs512-90s: FAILED open or read
+shasum: tvecs768: No such file or directory
+tvecs768: FAILED open or read
+shasum: tvecs768-90s: No such file or directory
+tvecs768-90s: FAILED open or read
+shasum: tvecs1024: No such file or directory
+tvecs1024: FAILED open or read
+shasum: tvecs1024-90s: No such file or directory
+tvecs1024-90s: FAILED open or read
+shasum: WARNING: 6 listed files could not be read

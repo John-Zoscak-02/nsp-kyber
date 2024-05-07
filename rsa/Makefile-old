@@ -1,0 +1,46 @@
+CC ?= /usr/bin/cc
+CFLAGS += -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls \
+  -Wshadow -Wpointer-arith -O3 -fomit-frame-pointer
+NISTFLAGS += -Wno-unused-result -O3 -fomit-frame-pointer
+RM = /bin/rm
+
+SOURCES = rsa/decrypt_text.c rsa/encrypt_text rsa/rsa.c
+SOURCESNINETIES = $(SOURCES) sha256.c sha512.c aes256ctr.c symmetric-aes.c
+HEADERS = rsa/decrypt_text.h rsa/encrypt_text.h rsa/rsa.h 
+HEADERSNINETIES = $(HEADERS) aes256ctr.h sha2.h
+
+.PHONY: all speed
+
+speed: \
+  test_speed512 \
+  test_speed768 \
+  test_speed1024 \
+  test_speed512-90s \
+  test_speed768-90s \
+  test_speed1024-90s
+
+test_speed512: $(SOURCES) $(HEADERS) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -DKYBER_K=2 $(SOURCES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed512
+
+test_speed768: $(SOURCES) $(HEADERS) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -DKYBER_K=3 $(SOURCES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed768
+
+test_speed1024: $(SOURCES) $(HEADERS) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -DKYBER_K=4 $(SOURCES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed1024
+
+test_speed512-90s: $(SOURCESNINETIES) $(HEADERSNINETIES) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -D KYBER_90S -DKYBER_K=2 $(SOURCESNINETIES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed512-90s
+
+test_speed768-90s: $(SOURCESNINETIES) $(HEADERSNINETIES) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -D KYBER_90S -DKYBER_K=3 $(SOURCESNINETIES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed768-90s
+
+test_speed1024-90s: $(SOURCESNINETIES) $(HEADERSNINETIES) cpucycles.h cpucycles.c speed_print.h speed_print.c test_speed.c randombytes.c
+	$(CC) $(CFLAGS) -D KYBER_90S -DKYBER_K=4 $(SOURCESNINETIES) randombytes.c cpucycles.c speed_print.c test_speed.c -o test_speed1024-90s
+
+clean:
+	-$(RM) -rf test_speed512
+	-$(RM) -rf test_speed768
+	-$(RM) -rf test_speed1024
+	-$(RM) -rf test_speed512-90s
+	-$(RM) -rf test_speed768-90s
+	-$(RM) -rf test_speed1024-90s
