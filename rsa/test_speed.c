@@ -10,9 +10,17 @@
 
 #define NTESTS 1000
 
+//extern const ltc_math_descriptor tfm_desc;
+extern const ltc_math_descriptor ltm_desc;
+
 int main(void)
 {
-  printf("STARTING");
+#ifdef $USE_LTM
+ltc_mp = ltm_desc;
+#elif defined $USE_TFM
+ltc_mp = tfm_desc;
+#endif
+
   uint64_t t[NTESTS];
 
   // DEFINING PK, SK, CIPHERTEXT LENGTHS....
@@ -26,14 +34,12 @@ int main(void)
   else if (KEYSIZE==4096) {polyveccompressedbytes = k * 352; polycompressedbytes=128;}
   int crypto_ciphertextbytes = polyveccompressedbytes + polycompressedbytes;
 
-  printf("defined pk, sk and ciphertext lengths");
   // INITIALIZING PRIVATEKEY, SECRETKEY, AND CIPHERTEXT FOR TESTING 
   int err, hash_idx, prng_idx, res;
   rsa_key key;
   unsigned char secretkey1[crypto_secretkeybytes];
   unsigned char secretkey2[crypto_secretkeybytes];
   unsigned char ciphertext[crypto_ciphertextbytes];
-  printf("defined privatekey secretkey and ciphertext vars for testing");
 
   // REGISTERING PRNG and HASH 
   //prng_state prng;
@@ -44,19 +50,16 @@ int main(void)
   
   /* register prng/hash */
   if (register_prng(&sprng_desc) == -1) {
-    printf("Error registering sprng");
     return 1;
   }
   /* register a math library (in this case TomsFastMath) */
   if (register_hash(&sha1_desc) == -1) {
-    printf("Error registering sha1");
     return 1;
   }
   hash_idx = find_hash("sha1");
   prng_idx = find_prng("sprng");
 
   /////////////////////// STARTING SPEED TESTS //////////////////////// 
-  printf("Starting Speed Tests!");
   int i = 0;
   for(i=0;i<NTESTS;i++) {
     t[i] = cpucycles();
@@ -122,12 +125,8 @@ int main(void)
     }
   }
   print_results("rsa_decaps: ", t, NTESTS);
-  printf("Finished Speed Tests!");
   //////////////////////// DONE WITH SPEED TESTS ///////////////////////
 
   // Clean up PRNG
-  //fortuna_done(&prng); 
-  printf("Cleaned up and exiting");
-
   return 0;
 }

@@ -2,9 +2,11 @@
 #include <tomcrypt.h>
 #include <stdio.h>
 
+extern const ltc_math_descriptor tfm_desc;
+
 int rsa_keypair_generate(int keysize, prng_state *prng, rsa_key *pk, rsa_key *sk) {
-    //int err = rsa_make_key(prng, find_prng("fortuna"), keysize, 65537, pk);
-    int err = rsa_make_key(prng, 2, keysize, 65537, pk);
+    int err = rsa_make_key(prng, find_prng("fortuna"), keysize, 65537, pk);
+    //int err = rsa_make_key(prng, 2, keysize, 65537, pk);
 
     if (err != CRYPT_OK) {
         printf("FAILED TO GENERATE KEYPAIR");
